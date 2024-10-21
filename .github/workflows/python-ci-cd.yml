@@ -51,4 +51,4 @@ jobs:
     - name: Deploy (simulated)
       run: |
         echo "Deploying to production..."
-        python src/main.py
+        python main.py
