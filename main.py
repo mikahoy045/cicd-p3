@@ -4,7 +4,6 @@ from colorama import Fore, init
 init(autoreset=True)
 
 def greet(name):
-    fdas
     return f"Hello, {name}!"
 
 def main():

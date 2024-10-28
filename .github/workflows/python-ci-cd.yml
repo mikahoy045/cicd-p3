@@ -49,7 +49,14 @@ jobs:
         pip install tqdm colorama
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     
-    - name: Deploy (simulated)
+    - name: Setup SSH key
       run: |
-        echo "Deploying to production..."
-        python main.py
+        mkdir -p ~/.ssh
+        echo "${{ secrets.GCP_SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H 34.101.137.191 >> ~/.ssh/known_hosts
+    
+    - name: Deploy to GCP
+      run: |
+        scp -i ~/.ssh/id_rsa -r ./* mikahoy045@34.101.137.191:/home/mikahoy045/app
+        ssh -i ~/.ssh/id_rsa mikahoy045@34.101.137.191 'cd /home/mikahoy045/app && python main.py'
